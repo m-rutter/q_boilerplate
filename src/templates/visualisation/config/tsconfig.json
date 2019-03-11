@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "downlevelIteration": true,
+    "lib": ["dom", "es2018"]
+  },
+  "include": ["../src/**/*", "./**/*"],
+  "exclude": ["node_modules"]
+}

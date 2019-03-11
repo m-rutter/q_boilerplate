@@ -1,7 +1,8 @@
 use std::path::PathBuf;
+use std::process;
 use structopt::StructOpt;
 
-use q_boilerplate::error::Error;
+use q_boilerplate::{error::Error, gen_viz};
 
 #[derive(Debug, StructOpt)]
 #[structopt(
@@ -27,17 +28,23 @@ struct Options {
         parse(from_os_str)
     )]
     path: Option<PathBuf>,
+    #[structopt(
+        help = "Opt out of creating a git repo for the new extension",
+        long = "no-git"
+    )]
+    no_git: bool,
 }
 
-fn main() -> Result<(), Error> {
+fn main() {
     let opt = Commands::from_args();
 
     match &opt {
-        Commands::Mashup(options) => {}
-        Commands::Visualisation(options) => {}
-    }
-
-    println!("{:?}", opt);
-
-    Ok(())
+        Commands::Mashup(_) => {
+            eprintln!("Mashup Template not yet implemented ");
+            process::exit(1);
+        }
+        Commands::Visualisation(options) => {
+            gen_viz(&options.name, &options.path, !options.no_git);
+        }
+    };
 }

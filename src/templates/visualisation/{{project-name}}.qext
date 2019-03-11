@@ -1,0 +1,14 @@
+{
+  "name": "{{project-name}}",
+  "description": "",
+  "type": "visualization",
+  "version": "1.0.0",
+  "author": "{{authors}}",
+  "homepage": "",
+  "keywords": "qlik-sense, visualization",
+  "license": "MIT",
+  "repository": "",
+  "dependencies": {
+    "qlik-sense": ">=3.2.x"
+  }
+}
