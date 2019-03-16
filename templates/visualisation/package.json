@@ -1,5 +1,5 @@
 {
-  "name": "{{project-name}}",
+  "name": "{{project_name}}",
   "description": "A Qlik Sense Visualisation extension",
   "version": "1.0.0",
   "author": "{{authors}}",

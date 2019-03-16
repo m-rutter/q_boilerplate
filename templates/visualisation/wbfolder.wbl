@@ -1,0 +1,3 @@
+{{project_name}}.js;
+{{project_name}}.qext;
+dist/{{project_name}}.js;

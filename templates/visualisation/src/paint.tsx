@@ -8,7 +8,8 @@ import { validate } from "./loadScriptIdentifiers";
 
 export function mounted(elem: HTMLElement[], layout: Layout) {
     if (process.env.NODE_ENV === "development") {
-        validate(qlik.currApp());
+        /* uncomment if you want to validate identifiers */
+        // validate(qlik.currApp());
     }
 }
 

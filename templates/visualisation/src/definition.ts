@@ -15,13 +15,11 @@ const about = {
         },
         paragraph1: {
             label:
-                "An extension for the Vodafone Data Quality Dashboard " +
-                "providing user feedback mechanism via integration with the " +
-                " Voafone Qlik Writeback API",
+                "An extension",
             component: "text",
         },
         header2: {
-            label: "Versions",
+            label: "Version",
             style: "header",
             component: "text",
         },
@@ -29,10 +27,7 @@ const about = {
             label: `Extension: v${PKG.version}`,
             component: "text",
         },
-        paragraph3: {
-            label: "Writeback API: v3.0.0",
-            component: "text",
-        },
+       
     },
 };
 
