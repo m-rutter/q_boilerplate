@@ -2,11 +2,13 @@
 extern crate include_dir;
 use git2::{Config, Repository, RepositoryInitOptions};
 use include_dir::{Dir, File};
-use std::env;
 use std::path::PathBuf;
 use tera::{Context, Tera};
 
 pub mod error;
+pub mod template;
+
+use template::{Template, TemplateKind};
 
 static VIZ_EXT_DIR: Dir = include_dir!("./templates/visualisation");
 
@@ -21,7 +23,7 @@ pub fn gen_viz(project_name: &str, path: &Option<PathBuf>, git: bool) -> Result<
         context.insert("authors", "");
     }
 
-    let template = Template(VIZ_EXT_DIR);
+    let template = Template::new(VIZ_EXT_DIR);
 
     for thing in template.iter() {
         match thing {
@@ -53,60 +55,4 @@ pub fn init_git_repo(path: &PathBuf) -> Result<Repository, error::Error> {
     let repo = Repository::init_opts(path, RepositoryInitOptions::new().bare(false))?;
 
     Ok(repo)
-}
-
-struct Template<'a>(Dir<'a>);
-
-impl<'a> Template<'a> {
-    pub fn iter(&self) -> TemplateIntoIterator<'a> {
-        let files = self.0.files().into_iter();
-        let dirs = self.0.dirs().into_iter();
-
-        TemplateIntoIterator {
-            dirs: Box::new(dirs),
-            files: Box::new(files),
-        }
-    }
-}
-
-struct TemplateIntoIterator<'a> {
-    dirs: Box<dyn Iterator<Item = &'a Dir<'a>> + 'a>,
-    files: Box<dyn Iterator<Item = &'a File<'a>> + 'a>,
-}
-
-impl<'a> Iterator for TemplateIntoIterator<'a> {
-    type Item = TemplateKind<'a>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if let Some(file) = self.files.next() {
-            Some(TemplateKind::File(*file))
-        } else {
-            if let Some(dir) = self.dirs.next() {
-                self.files = Box::new(dir.files().iter());
-                Some(TemplateKind::Dir(*dir))
-            } else {
-                None
-            }
-        }
-    }
-}
-
-enum TemplateKind<'a> {
-    Dir(Dir<'a>),
-    File(File<'a>),
-}
-
-impl<'a> IntoIterator for Template<'a> {
-    type Item = TemplateKind<'a>;
-    type IntoIter = TemplateIntoIterator<'a>;
-
-    fn into_iter(self) -> Self::IntoIter {
-        let files = self.0.files().into_iter();
-        let dirs = self.0.dirs().into_iter();
-
-        Self::IntoIter {
-            dirs: Box::new(dirs),
-            files: Box::new(files),
-        }
-    }
 }
