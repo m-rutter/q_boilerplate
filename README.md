@@ -2,7 +2,7 @@
 
 Cli too for creating boilerplate for Qlik Sense Extensions. Templates use Webpack, Typescript, React, styled-components, jest (testing), and storybook (ui-prototyping).
 
-# Usage
+## Usage
 
 Either clone this repo and build and install the cli using `cargo install`, or download the pre-built binary in the releases. At the moment there are only pre-built binaries for Windows because I have not yet setup a CI and most users of this cli will be windows users.
 
@@ -24,7 +24,7 @@ SUBCOMMANDS:
     visualisation    Creates Visualisation extension template
 ```
 
-## visualisation subcommand
+### visualisation subcommand
 Run this sub command within the Qlik Sense Extension directory to create a new visualisation extension.
 
 ```
