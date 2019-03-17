@@ -19,7 +19,7 @@ SUBCOMMANDS:
 ```
 
 ## visualisation subcommand
-```
+```sh
 Creates Visualisation extension template
 
 USAGE:
