@@ -2,6 +2,10 @@
 
 Cli too for creating boilerplate for Qlik Sense Extensions. Templates use Webpack, Typescript, React, styled-components, jest (testing), and storybook (ui-prototyping).
 
+# Usage
+
+Either clone this repo and build the cli using `cargo install`, or download the pre-built binary in the releases. At the moment there are only pre-built binaries for Windows because I have no yet setup a CI and most users of this cli will be windows users.
+
 ```
 q_boilerplate 0.1.0
 Michael Rutter <michael.john.rutter@gmail.com>
