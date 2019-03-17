@@ -1,6 +1,6 @@
 # q_boilerplate
 
-```sh
+```
 q_boilerplate 0.1.0
 Michael Rutter <michael.john.rutter@gmail.com>
 Generates boilerplate code for Qlik Extensions
@@ -19,7 +19,7 @@ SUBCOMMANDS:
 ```
 
 ## visualisation subcommand
-```sh
+```
 Creates Visualisation extension template
 
 USAGE:
