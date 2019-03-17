@@ -14,9 +14,19 @@ pub struct Error {
 
 #[derive(Debug)]
 enum ErrorKind {
+    Msg(String),
     Parse,
     Git,
     IO,
+}
+
+impl Error {
+    pub fn new(msg: String) -> Self {
+        Error {
+            kind: ErrorKind::Msg(msg),
+            source: None,
+        }
+    }
 }
 
 impl StdError for Error {
@@ -37,6 +47,7 @@ impl fmt::Display for Error {
             ErrorKind::Parse => write!(f, "Error parsing template"),
             ErrorKind::Git => write!(f, "Error initiating git repo"),
             ErrorKind::IO => write!(f, "io error"),
+            ErrorKind::Msg(msg) => write!(f, "{}", msg),
         }
     }
 }

@@ -24,18 +24,13 @@ struct Options {
     #[structopt(help = "Project name")]
     name: String,
     #[structopt(
-        help = "Optional output path, otherwise the current working directory",
-        parse(from_os_str)
-    )]
-    path: Option<PathBuf>,
-    #[structopt(
         help = "Opt out of creating a git repo for the new extension",
         long = "no-git"
     )]
     no_git: bool,
 }
 
-fn main() {
+fn main() -> Result<(), CrateError> {
     let opt = Commands::from_args();
 
     match &opt {
@@ -44,7 +39,9 @@ fn main() {
             process::exit(1);
         }
         Commands::Visualisation(options) => {
-            gen_viz(&options.name, &options.path, !options.no_git);
+            gen_viz(&options.name, !options.no_git)?;
         }
     };
+
+    Ok(())
 }
