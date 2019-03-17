@@ -2,7 +2,7 @@ use git2::{Config, Repository, RepositoryInitOptions};
 use heck::KebabCase;
 use include_dir::{include_dir, include_dir_impl, Dir};
 use std::env;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use tera::{Context, Tera};
 
 mod error;
@@ -15,20 +15,42 @@ static VIZ_EXT_DIR: Dir = include_dir!("./templates/visualisation");
 
 pub fn gen_viz(project_name: &str, git: bool) -> Result<(), error::Error> {
     let project_dir_name = project_name.to_kebab_case();
-    let project_directory = create_project_directory(&project_dir_name)?;
+    let project_directory = create_project_path(&project_dir_name)?;
 
-    init_git_repo(&project_directory)?;
+    if git {
+        init_git_repo(&project_directory)?;
+    } else {
+        std::fs::create_dir(&project_directory)?;
+    }
 
     let template = Template::new(VIZ_EXT_DIR);
-    let context = create_context(project_name, &project_dir_name);
+    let context = create_context(&project_dir_name);
 
     for thing in template.iter() {
         match thing {
             TemplateKind::Dir(dir) => {
-                println!("{:?}", dir);
+                let dir_name = dir.path();
+
+                let path = Tera::one_off(dir_name.to_str().unwrap(), &context, true)?;
+
+                let dir_name = Path::new(&path);
+
+                std::fs::create_dir(project_directory.join(&dir_name))?;
             }
             TemplateKind::File(file) => {
-                println!("{:?}", file);
+                let file_name = file.path();
+
+                let path = Tera::one_off(file_name.to_str().unwrap(), &context, true)?;
+                let contents = Tera::one_off(
+                    std::str::from_utf8(file.contents()).unwrap(),
+                    &context,
+                    true,
+                )
+                .unwrap();
+
+                let file_name = Path::new(&path);
+
+                std::fs::write(project_directory.join(&file_name), contents)?;
             }
         };
     }
@@ -36,7 +58,7 @@ pub fn gen_viz(project_name: &str, git: bool) -> Result<(), error::Error> {
     Ok(())
 }
 
-fn create_project_directory(project_name: &str) -> Result<PathBuf, Error> {
+fn create_project_path(project_name: &str) -> Result<PathBuf, Error> {
     let project_dir_name = project_name.to_kebab_case();
 
     let project_directory = env::current_dir()
@@ -53,30 +75,47 @@ fn create_project_directory(project_name: &str) -> Result<PathBuf, Error> {
     Ok(project_directory)
 }
 
-fn create_context(project_name: &str, project_dir_name: &str) -> Context {
+fn create_context(project_dir_name: &str) -> Context {
     let mut context = Context::new();
 
-    context.insert("project_name", project_name);
-    context.insert("project_dir_name", &project_dir_name);
+    context.insert("project_name", &project_dir_name);
 
-    if let Some((author, email)) = get_git_author() {
-        context.insert("authors", &author);
+    if let Some(user) = get_git_author() {
+        context.insert("author", &user.user_name);
+
+        if let Some(email) = user.email {
+            context.insert("email", &email);
+        } else {
+            context.insert("email", "author@example.com");
+        }
     } else {
-        context.insert("authors", "Author");
+        context.insert("author", "author");
+        context.insert("email", "author@example.com");
     };
 
     context
 }
 
-fn get_git_author() -> Option<(String, String)> {
-    if let Ok(config) = Config::open_default() {
-        if let Ok(user) = config.get_string("user.name") {
-            Some(user)
-        } else {
-            None
-        }
+struct GitUser {
+    user_name: String,
+    email: Option<String>,
+}
+
+fn get_git_author() -> Option<GitUser> {
+    let config = Config::open_default().ok()?;
+
+    let user = config.get_string("user.name").ok()?;
+
+    if let Ok(email) = config.get_string("user.email") {
+        Some(GitUser {
+            user_name: user,
+            email: Some(email),
+        })
     } else {
-        None
+        Some(GitUser {
+            user_name: user,
+            email: None,
+        })
     }
 }
 

@@ -3,7 +3,7 @@
   "description": "",
   "type": "visualization",
   "version": "1.0.0",
-  "author": "{{authors}}",
+  "author": "{{author}}",
   "homepage": "",
   "keywords": "qlik-sense, visualization",
   "license": "MIT",
