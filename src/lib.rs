@@ -21,7 +21,9 @@ pub fn gen_viz(project_name: &str, path: &Option<PathBuf>, git: bool) -> Result<
         context.insert("authors", "");
     }
 
-    for thing in Template(VIZ_EXT_DIR).into_iter() {
+    let template = Template(VIZ_EXT_DIR);
+
+    for thing in template.iter() {
         match thing {
             TemplateKind::Dir(dir) => {
                 println!("{:?}", dir);
@@ -54,6 +56,18 @@ pub fn init_git_repo(path: &PathBuf) -> Result<Repository, error::Error> {
 }
 
 struct Template<'a>(Dir<'a>);
+
+impl<'a> Template<'a> {
+    pub fn iter(&self) -> TemplateIntoIterator<'a> {
+        let files = self.0.files().into_iter();
+        let dirs = self.0.dirs().into_iter();
+
+        TemplateIntoIterator {
+            dirs: Box::new(dirs),
+            files: Box::new(files),
+        }
+    }
+}
 
 struct TemplateIntoIterator<'a> {
     dirs: Box<dyn Iterator<Item = &'a Dir<'a>> + 'a>,
