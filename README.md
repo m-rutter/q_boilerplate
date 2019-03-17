@@ -21,6 +21,8 @@ SUBCOMMANDS:
 ```
 
 ## visualisation subcommand
+Run this sub command within the Qlik Sense Extension directory to create a new visualisation extension.
+
 ```
 Creates Visualisation extension template
 
