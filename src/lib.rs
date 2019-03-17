@@ -5,10 +5,11 @@ use include_dir::{Dir, File};
 use std::path::PathBuf;
 use tera::{Context, Tera};
 
-pub mod error;
-pub mod template;
+mod error;
+mod template;
 
-use template::{Template, TemplateKind};
+pub use self::error::Error;
+use self::template::{Template, TemplateKind};
 
 static VIZ_EXT_DIR: Dir = include_dir!("./templates/visualisation");
 
@@ -20,7 +21,7 @@ pub fn gen_viz(project_name: &str, path: &Option<PathBuf>, git: bool) -> Result<
     if let Some(author) = get_git_author() {
         context.insert("authors", &author);
     } else {
-        context.insert("authors", "");
+        context.insert("authors", "Author");
     }
 
     let template = Template::new(VIZ_EXT_DIR);

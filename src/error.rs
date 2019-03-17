@@ -14,9 +14,9 @@ pub struct Error {
 
 #[derive(Debug)]
 enum ErrorKind {
-    ParseError,
-    GitError,
-    IOError,
+    Parse,
+    Git,
+    IO,
 }
 
 impl StdError for Error {
@@ -34,9 +34,9 @@ impl StdError for Error {
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match &self.kind {
-            ErrorKind::ParseError => write!(f, "Error parsing template"),
-            ErrorKind::GitError => write!(f, "Error initiating git repo"),
-            ErrorKind::IOError => write!(f, "io error"),
+            ErrorKind::Parse => write!(f, "Error parsing template"),
+            ErrorKind::Git => write!(f, "Error initiating git repo"),
+            ErrorKind::IO => write!(f, "io error"),
         }
     }
 }
@@ -44,7 +44,7 @@ impl fmt::Display for Error {
 impl From<TeraError> for Error {
     fn from(error: TeraError) -> Error {
         Error {
-            kind: ErrorKind::ParseError,
+            kind: ErrorKind::Parse,
             source: Some(error.into()),
         }
     }
@@ -53,7 +53,7 @@ impl From<TeraError> for Error {
 impl From<Git2Error> for Error {
     fn from(error: Git2Error) -> Error {
         Error {
-            kind: ErrorKind::GitError,
+            kind: ErrorKind::Git,
             source: Some(error.into()),
         }
     }
@@ -62,7 +62,7 @@ impl From<Git2Error> for Error {
 impl From<IOError> for Error {
     fn from(error: IOError) -> Error {
         Error {
-            kind: ErrorKind::IOError,
+            kind: ErrorKind::IO,
             source: Some(error.into()),
         }
     }

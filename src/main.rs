@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use std::process;
 use structopt::StructOpt;
 
-use q_boilerplate::{error::Error, gen_viz};
+use q_boilerplate::{gen_viz, Error as CrateError};
 
 #[derive(Debug, StructOpt)]
 #[structopt(
