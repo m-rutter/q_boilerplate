@@ -4,7 +4,7 @@ Cli too for creating boilerplate for Qlik Sense Extensions. Templates use Webpac
 
 ## Usage
 
-Either clone this repo and build and install the cli using `cargo install`, or download the pre-built binary in the releases. At the moment there are only pre-built binaries for Windows because I have not yet setup a CI and most users of this cli will be windows users.
+Either clone this repo and build and install the cli using `cargo install .` in the project directory, or download the pre-built binary in the releases. At the moment there are only pre-built binaries for Windows because I have not yet setup a CI and most users of this cli will be windows users.
 
 ```
 q_boilerplate 0.1.0
