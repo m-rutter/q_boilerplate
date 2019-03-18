@@ -1,6 +1,6 @@
 # q_boilerplate
 
-Cli too for creating boilerplate for Qlik Sense Extensions. Templates use Webpack, Typescript, React, styled-components, jest (testing), and storybook (ui-prototyping).
+Cli tool for creating boilerplate for Qlik Sense Extensions. Templates use Webpack, Typescript, React, styled-components, jest (testing), and storybook (ui-prototyping).
 
 ## Usage
 
